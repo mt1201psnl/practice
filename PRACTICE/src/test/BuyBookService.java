@@ -5,11 +5,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class BuyBookService {
+public class BuyBookService extends AbstractService {
 
-    static HashMap<String, MemberVo> memberMap = new HashMap<String, MemberVo>();
-
-    public static void execute() {
+    public void execute() {
 
         MemberVo kaiin1 = memberRegist("佐藤一郎", 15);
         MemberVo kaiin2 = memberRegist("鈴木二郎", 25);
@@ -39,18 +37,15 @@ public class BuyBookService {
 
     }
 
-    private static MemberVo memberRegist(String name, int old) {
+    private MemberVo memberRegist(String name, int old) {
 
-        MemberVo memberVo = new MemberVo();
-
-        memberVo.setMemberName(name);
-        memberVo.setMemberOld(old);
+        MemberVo memberVo = new MemberVo(name, old);
 
         return memberVo;
 
     }
 
-    private static BooksVo bookRegist(String name, int pages) {
+    private BooksVo bookRegist(String name, int pages) {
 
         BooksVo booksVo = new BooksVo();
 
@@ -61,13 +56,13 @@ public class BuyBookService {
 
     }
 
-    private static void buyBook(MemberVo memberVo, List<BooksVo> bookList) {
+    private void buyBook(MemberVo memberVo, List<BooksVo> bookList) {
 
         memberVo.setMemberHaveBooks(bookList);
 
     }
 
-    private static void showAll(HashMap<String, MemberVo> memberMap) {
+    private void showAll(HashMap<String, SuperMemberVo> memberMap) {
 
         for (String key : memberMap.keySet()) {
 
@@ -77,7 +72,8 @@ public class BuyBookService {
             System.out.println("[年齢]：" + memberMap.get(key).getMemberOld() + "歳");
             System.out.println("[所持している本]↓");
 
-            for (BooksVo memberHaveBooks : memberMap.get(key).getMemberHaveBooks()) {
+            //子クラスの型にキャスト
+            for (BooksVo memberHaveBooks : ((MemberVo) memberMap.get(key)).getMemberHaveBooks()) {
 
                 System.out.println("・「" + memberHaveBooks.getBookName() + "」 " + memberHaveBooks.getBookPages() + "ページ");
 
